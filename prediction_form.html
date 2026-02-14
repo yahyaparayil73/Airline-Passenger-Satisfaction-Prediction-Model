@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Passenger Satisfaction Prediction</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f7f9fc;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .form-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      border-bottom: 2px solid #0d6efd;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      color: #0d6efd;
+    }
+
+    .form-label {
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+    }
+
+    .prediction-text {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e9f7ef;
+      border-left: 5px solid #28a745;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="form-container">
+    <form action="/predict" method="POST">
+      
+      <h2>Passenger Info</h2>
+      <div class="row g-3 mb-3">
+        <div class="col-md-3">
+          <label class="form-label" for="Age">Age</label>
+          <input name="Age" type="number" class="form-control" placeholder="Age" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="Distance">Flight Distance</label>
+          <input name="Distance" type="number" class="form-control" placeholder="Distance" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="dep_delay">Departure Delay</label>
+          <input name="dep_delay" type="number" class="form-control" placeholder="Dep Delay" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="arr_delay">Arrival Delay</label>
+          <input name="arr_delay" type="number" class="form-control" placeholder="Arr Delay" required>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <label class="form-label" for="Gender">Gender</label>
+          <select name="Gender" class="form-select">
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="CustType">Customer Type</label>
+          <select name="CustType" class="form-select">
+            <option>Loyal</option>
+            <option>Disloyal</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="TravelType">Travel Type</label>
+          <select name="TravelType" class="form-select">
+            <option>Business</option>
+            <option>Personal</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="Class">Class</label>
+          <select name="Class" class="form-select">
+            <option>Business</option>
+            <option>Eco</option>
+            <option>Eco Plus</option>
+          </select>
+        </div>
+      </div>
+
+      <h2>Service Ratings (0-5)</h2>
+      <div class="row g-3 mb-3">
+        <div class="col-md-3">
+          <label class="form-label" for="wifi">Wifi</label>
+          <input name="wifi" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="time">Departure Time Convenience</label>
+          <input name="time" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="booking">Online Booking</label>
+          <input name="booking" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="gate">Gate Location</label>
+          <input name="gate" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-3">
+          <label class="form-label" for="food">Food & Drink</label>
+          <input name="food" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="boarding">Online Boarding</label>
+          <input name="boarding" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="seat">Seat Comfort</label>
+          <input name="seat" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="ent">Entertainment</label>
+          <input name="ent" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <label class="form-label" for="onboard">Onboard Service</label>
+          <input name="onboard" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="legroom">Legroom</label>
+          <input name="legroom" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="baggage">Baggage Handling</label>
+          <input name="baggage" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="checkin">Checkin</label>
+          <input name="checkin" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <label class="form-label" for="service">Inflight Service</label>
+          <input name="service" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="clean">Cleanliness</label>
+          <input name="clean" type="number" min="0" max="5" class="form-control" placeholder="0-5" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary mb-3">Predict</button>
+
+      {% if prediction_text %}
+      <div class="prediction-text">
+        <h5>{{ prediction_text }}</h5>
+      </div>
+      {% endif %}
+
+    </form>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
